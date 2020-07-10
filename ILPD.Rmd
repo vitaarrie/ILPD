@@ -20,6 +20,19 @@ GES....
 ILPD = read.csv ("/Users/fita/Documents/1. UII/Causal Modelling/TA/Indian Liver Patient Dataset (ILPD).csv")
 library(readr)
 
+# convert category
+# https://stackoverflow.com/questions/30298773/rhow-to-replace-string-to-integer
+ILPD$Female[which(ILPD$Female=="Female")] <- 0
+ILPD$Female[which(ILPD$Female=="Male")] <- 1
+ILPD$Female <- as.numeric(ILPD$Female)
+
+max = ncol(ILPD)
+for(i in 1:max) {
+  # https://stackoverflow.com/questions/7070173/convert-data-frame-column-to-a-vector
+  print(i)
+  hist(as.vector(unlist(ILPD[i])), main=paste("Variabel ke", i, names(ILPD)[i]), xlab = "")
+}
+
 set.seed(200)
 rDAG <- randomDAG(n = 6, prob = 0.5, lB=0.1, uB=1)
 plot(rDAG, main = "Sebuah Random DAG")
