@@ -1,0 +1,51 @@
+---
+title: "ILPD"
+author: "Miftah-Vita"
+date: "7/9/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Abstrak dan motivasi
+
+bla..bla,,bla..
+
+## Metode
+
+GES....
+```{r, attr.source = ".numberLines", message=FALSE, warning=FALSE}
+ILPD = read.csv ("/Users/fita/Documents/1. UII/Causal Modelling/TA/Indian Liver Patient Dataset (ILPD).csv")
+library(readr)
+
+set.seed(200)
+rDAG <- randomDAG(n = 6, prob = 0.5, lB=0.1, uB=1)
+plot(rDAG, main = "Sebuah Random DAG")
+```
+
+Generate Data Baru
+```{r, attr.source = ".numberLines", message=FALSE, warning=FALSE}
+dataRes <- rmvDAG(n = 150, rDAG, errDist="normal")
+````
+Distrubusi Data
+
+```{r, attr.source = ".numberLines", message=FALSE, warning=FALSE}
+par(mfrow=c(2,3))
+for(i in 1:ncol(dataRes)) {
+  hist(dataRes[, i], main=paste("Variabel ke", i), xlab = "")
+}
+````
+
+
+## Diskusi Pemodelan
+```{r, attr.source = ".numberLines", message=FALSE, warning=FALSE}
+score <- new("GaussL0penObsScore", dataRes)
+ges.fit <- ges(score)
+par(mfrow=c(1,2))
+plot(ges.fit$essgraph, main = "Estimated CPDAG")
+plot(rDAG, main = "True DAG")  
+
+````
+
